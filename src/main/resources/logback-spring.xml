@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <property name="LOG_HOME" value="${LOG_PATH}/logs}"/>
+
+    <contextName>logback</contextName>
+    <!--应用名称-->
+    <property name="APP_NAME" value="qrcode-pay"/>
+
+    <!--输出到控制台-->
+    <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+<!--             <pattern>%d{yyyy-MM-dd HH:mm:ss} === [%thread] === %-5level === %logger{50} - %msg%n</pattern> -->
+            <pattern>[%date{HH:mm:ss}] [%-5level] --%mdc{client} %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!--按天生成日志-->
+    <appender name="logFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <Prudent>true</Prudent>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>
+                ${LOG_HOME}/${APP_NAME}-%d{yyyy-MM, aux}/%d{yyyy-MM-dd}.log
+            </FileNamePattern>
+        </rollingPolicy>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>
+                <pattern>%d{yyyy-MM-dd HH:mm:ss} === [%thread] === %-5level === %logger{50} - %msg%n</pattern>
+            </Pattern>
+        </layout>
+    </appender>
+    <!--日志输出限制-->
+    <root level="info">
+        <appender-ref ref="stdout"/>
+        <appender-ref ref="logFile"/>
+    </root>
+    <!--特定目录需要输出的级别-->
+    <!-- <logger name="com.scdc" level="INFO" additivity="false">
+        <appender-ref ref="console"/>
+    </logger> -->
+</configuration>
